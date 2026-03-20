@@ -15,20 +15,30 @@ st.title("Mapa de Duelos & Ações Defensivas")
 # ==========================
 # 1. Dados (Atualizados)
 # ==========================
-eventos = [
-    ("DUEL WON", 41.71, 59.45), ("DUEL LOST", 18.61, 41.16),
-    ("DUEL WON", 7.14, 55.46), ("AERIAL WON", 8.47, 43.82),
-    ("FOUL", 56.84, 57.79), ("DUEL WON", 27.09, 73.08),
-    ("FOULED", 56.84, 67.10), ("DUEL WON", 16.78, 65.10),
-    ("DUEL WON", 20.44, 67.26), ("AERIAL WON", 25.76, 67.43),
-    ("DUEL WON", 13.95, 36.51), ("DUEL WON", 23.76, 50.14),
-    ("CLEARANCE", 19.77, 43.16), ("INTERCEPTION", 32.74, 49.48),
-    ("DUEL WON", 27.58, 63.11), ("DUEL LOST", 15.62, 38.17),
-    ("BLOCK", 14.62, 54.63), ("DUEL WON", 14.62, 58.29),
-    ("CLEARANCE", 13.95, 41.16), ("AERIAL LOST", 12.29, 45.98)
+events_data = [
+    ("DUEL WON", 41.71, 59.45, "videos/Duel Won 1.mp4"),
+    ("DUEL LOST", 18.61, 41.16, "videos/Duel Lost 1.mp4"),
+    ("DUEL WON", 7.14, 55.46, "videos/Duel Won 2.mp4"),
+    ("AERIAL WON", 8.47, 43.82, "videos/Aeriel Won 1.mp4"),
+    ("FOUL", 56.84, 57.79, "videos/Foul 1.mp4"),
+    ("DUEL WON", 27.09, 73.08, "videos/Duel Won 3.mp4"),
+    ("FOULED", 56.84, 67.10, "videos/Fouled 1.mp4"),
+    ("DUEL WON", 16.78, 65.10, "videos/Duel Won 4.mp4"),
+    ("DUEL WON", 20.44, 67.26, "videos/Duel Won 5.mp4"),
+    ("AERIAL WON", 25.76, 67.43, "videos/Aeriel Won 2.mp4"),
+    ("DUEL WON", 13.95, 36.51, "videos/Duel Won 6.mp4"),
+    ("DUEL WON", 23.76, 50.14, "videos/Duel Won 7.mp4"),
+    ("CLEARANCE", 19.77, 43.16, "videos/Clearance 1.mp4"),
+    ("INTERCEPTION", 32.74, 49.48, "videos/Interception 1.mp4"),
+    ("DUEL WON", 27.58, 63.11, "videos/Duel Won 8.mp4"),
+    ("DUEL LOST", 15.62, 38.17, "videos/Duel Lost 2.mp4"),
+    ("BLOCK", 14.62, 54.63, "videos/Block 1.mp4"),
+    ("DUEL WON", 14.62, 58.29, "videos/Duel Won 9.mp4"),
+    ("CLEARANCE", 13.95, 41.16, "videos/Clearance 2.mp4"),
+    ("AERIAL LOST", 12.29, 45.98, "videos/Aeriel Lost 1.mp4"),
 ]
 
-df = pd.DataFrame(eventos, columns=["tipo", "x", "y"])
+df = pd.DataFrame(events_data, columns=["type", "x", "y", "video"])
 
 # ==========================
 # 2. Função de Estilização
