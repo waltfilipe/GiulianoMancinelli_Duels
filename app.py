@@ -94,13 +94,15 @@ with col1:
         facecolor='#ffffff'
     )
 
-    # Converter para imagem para o componente de clique
+    # Ajuste para garantir que o campo ocupe toda a imagem gerada
+    plt.subplots_adjust(left=0.05, right=0.95, bottom=0.05, top=0.95)
+
     buf = BytesIO()
-    plt.savefig(buf, format="png", dpi=100, bbox_inches='tight')
+    # SALVAR SEM O TIGHT PARA MANTER A INTEGRIDADE DAS COORDENADAS
+    plt.savefig(buf, format="png", dpi=100) 
     buf.seek(0)
     img_obj = Image.open(buf)
 
-    # Componente de clique
     click = streamlit_image_coordinates(img_obj, width=850)
     
 # ==========================
