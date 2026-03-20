@@ -168,7 +168,7 @@ with col1:
     st.markdown("""
     **Total:** 11  
     **Won:** 9  
-    **25.0%**
+    **81.8%**
     """)
 
 with col2:
