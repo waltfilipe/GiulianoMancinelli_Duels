@@ -109,7 +109,7 @@ with col1:
 selected_event = None
 
 if click is not None:
-    real_w, real_h = image.size
+    real_w, real_h = img_obj.size
     disp_w, disp_h = click["width"], click["height"]
     
     pixel_x = click["x"] * (real_w / disp_w)
