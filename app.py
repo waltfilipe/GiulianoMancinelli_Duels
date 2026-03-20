@@ -4,6 +4,7 @@ from mplsoccer import Pitch
 import pandas as pd
 from streamlit_image_coordinates import streamlit_image_coordinates
 from io import BytesIO
+import numpy as np
 from PIL import Image
 from matplotlib.lines import Line2D
 
@@ -13,7 +14,7 @@ st.set_page_config(layout="wide", page_title="Análise de Duelos")
 st.title("Mapa de Duelos & Ações Defensivas")
 
 # ==========================
-# 1. Dados (Atualizados)
+# Data Setup
 # ==========================
 events_data = [
     ("DUEL WON", 41.71, 59.45, "videos/Duel Won 1.mp4"),
@@ -40,41 +41,39 @@ events_data = [
 
 df = pd.DataFrame(events_data, columns=["type", "x", "y", "video"])
 
-# ==========================
-# 2. Função de Estilização
-# ==========================
-def get_style(tipo):
-    if tipo == "DUEL LOST": return 'x', (1, 0, 0, 0.8), 120, 2.5
-    elif tipo == "DUEL WON": return 'o', (0, 0.6, 0, 0.9), 120, 0.5
-    elif tipo == "AERIAL WON": return '^', (0.2, 0.3, 1, 0.9), 140, 0.5
-    elif tipo == "AERIAL LOST": return 'v', (1, 0, 0, 0.8), 140, 0.5
-    elif tipo == "FOULED": return 's', (1, 0.6, 0, 0.9), 120, 0.5
-    elif tipo == "FOUL": return 'P', (0.6, 0.2, 0.2, 0.9), 140, 0.5
-    elif tipo == "INTERCEPTION": return 'D', (0.3, 0.3, 0.3, 0.9), 120, 0.5
-    elif tipo == "CLEARANCE": return 'h', (0, 0.8, 0.8, 0.9), 140, 0.5
-    elif tipo == "BLOCK": return 'p', (0.6, 0.1, 0.6, 0.9), 140, 0.5
-    return 'o', 'gray', 100, 0.5
-
-# Layout em duas colunas (Mapa | Info/Vídeo)
 col1, col2 = st.columns([1, 1])
 
+def get_style(event_type):
+    # Retorna: marker, color, size, linewidth
+    if event_type == "DUEL LOST": return 'x', (1, 0, 0, 0.8), 100, 2.5
+    elif event_type == "DUEL WON": return 'o', (0, 0.6, 0, 0.9), 100, 0.5
+    elif event_type == "AERIAL WON": return '^', (0.2, 0.3, 1, 0.9), 130, 0.5
+    elif event_type == "AERIAL LOST": return 'v', (1, 0, 0, 0.8), 130, 0.5
+    elif event_type == "FOULED": return 's', (1, 0.6, 0, 0.9), 100, 0.5
+    elif event_type == "FOUL": return 'P', (0.6, 0.2, 0.2, 0.9), 140, 0.5
+    elif event_type == "INTERCEPTION": return 'D', (0.3, 0.3, 0.3, 0.9), 100, 0.5
+    elif event_type == "CLEARANCE": return 'h', (0, 0.8, 0.8, 0.9), 130, 0.5
+    elif event_type == "BLOCK": return 'p', (0.6, 0.1, 0.6, 0.9), 130, 0.5
+    return 'o', 'gray', 80, 0.5
+
 # ==========================
-# 3. Visualização (Coluna da Esquerda)
+# Map Visualization (Left Col)
 # ==========================
 with col1:
     pitch = Pitch(pitch_type='statsbomb', pitch_color='#f5f5f5', line_color='#4a4a4a')
-    fig, ax = pitch.draw(figsize=(10, 8))
+    fig, ax = pitch.draw(figsize=(10, 8)) 
     
-    # Plotagem dos eventos no campo
     for _, row in df.iterrows():
-        marker, color, size, lw = get_style(row["tipo"])
+        marker, color, size, lw = get_style(row["type"])
         pitch.scatter(row.x, row.y, marker=marker, s=size, color=color, 
                       edgecolors=color, linewidths=lw, ax=ax, zorder=3)
 
-    # Legenda Customizada com Line2D
+    ax.set_title("Defensive & Duel Analysis", fontsize=16, fontweight='bold', pad=15)
+
+    # Legenda Compacta Atualizada
     legend_elements = [
         Line2D([0], [0], marker='o', color='w', label='Duel Won', markerfacecolor=(0, 0.6, 0), markersize=10),
-        Line2D([0], [0], marker='x', color=(1, 0, 0), label='Duel Lost', markersize=10, lw=0),
+        Line2D([0], [0], marker='x', color=(1, 0, 0), label='Duel Lost', markersize=10, lw=0, markeredgewidth=2),
         Line2D([0], [0], marker='^', color='w', label='Aerial Won', markerfacecolor=(0.2, 0.3, 1), markersize=10),
         Line2D([0], [0], marker='v', color='w', label='Aerial Lost', markerfacecolor=(1, 0, 0), markersize=10),
         Line2D([0], [0], marker='D', color='w', label='Interception', markerfacecolor=(0.3, 0.3, 0.3), markersize=10),
@@ -83,36 +82,27 @@ with col1:
         Line2D([0], [0], marker='s', color='w', label='Fouled', markerfacecolor=(1, 0.6, 0), markersize=10),
         Line2D([0], [0], marker='P', color='w', label='Foul', markerfacecolor=(0.6, 0.2, 0.2), markersize=10),
     ]
+    
+    ax.legend(
+        handles=legend_elements, 
+        loc='upper left', 
+        bbox_to_anchor=(0.01, 0.99),
+        frameon=True, 
+        fontsize='small',
+        framealpha=1.0,
+        edgecolor='black',
+        facecolor='#ffffff'
+    )
 
-    ax.legend(handles=legend_elements, loc='upper left', bbox_to_anchor=(0.02, 0.98),
-              frameon=True, fontsize='small', framealpha=1.0, edgecolor='black', facecolor='white')
-
-    ax.set_title("Defensive & Duel Analysis", fontsize=16, fontweight='bold')
-
-    # Converter Matplotlib para Imagem
+    # Converter para imagem para o componente de clique
     buf = BytesIO()
-    plt.savefig(buf, format="png", dpi=120, bbox_inches='tight')
+    plt.savefig(buf, format="png", dpi=100, bbox_inches='tight')
     buf.seek(0)
-    image = Image.open(buf)
+    img_obj = Image.open(buf)
 
-    # Captura de cliques na imagem
-    click = streamlit_image_coordinates(image, width=850)
-
-# ==========================
-# 4. Detalhes (Coluna da Direita)
-# ==========================
-with col2:
-    st.subheader("Detalhes do Evento")
-    if click:
-        st.write(f"Você clicou na posição: **x={click['x']}, y={click['y']}**")
-        st.info("Aqui você pode filtrar o dataframe ou carregar o vídeo correspondente à coordenada clicada.")
-        # Exemplo: df_selecionado = df[(df.x-click.x).abs() < 2] ...
-    else:
-        st.write("Clique em um marcador no mapa para ver detalhes ou carregar o vídeo.")
-
-    st.divider()
-    st.dataframe(df, use_container_width=True)
-  
+    # Componente de clique
+    click = streamlit_image_coordinates(img_obj, width=850)
+    
 # ==========================
 # Coordinate Mapping Logic
 # ==========================
