@@ -30,7 +30,7 @@ events_data = [
     ("DUEL WON", 13.95, 36.51, "videos/Duel Won 6.mp4"),
     ("DUEL WON", 23.76, 50.14, "videos/Duel Won 7.mp4"),
     ("CLEARANCE", 19.77, 43.16, "videos/Clearance 1.mp4"),
-    ("INTERCEPTION", 32.74, 49.48, "videos/Interception 1.mp4"),
+    ("INTERCEPTION", 32.74, 49.48, "videos/Duel Lost 3.mp4"),
     ("DUEL WON", 27.58, 63.11, "videos/Duel Won 8.mp4"),
     ("DUEL LOST", 15.62, 38.17, "videos/Duel Lost 2.mp4"),
     ("BLOCK", 14.62, 54.63, "videos/Block 1.mp4"),
