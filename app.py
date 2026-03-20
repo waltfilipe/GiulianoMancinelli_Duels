@@ -136,7 +136,7 @@ ax.legend(
 # ==========================
 # Attack Arrow
 # ==========================
-pitch.arrows(40, 85, 60, 85,
+pitch.arrows(50, 85, 70, 85,
              color='#4a4a4a',
              width=1.2,
              headwidth=3,
@@ -144,7 +144,7 @@ pitch.arrows(40, 85, 60, 85,
              ax=ax,
              clip_on=False)
 
-ax.text(50, 88, 'ATTACK DIRECTION',
+ax.text(60, 88, 'ATTACK DIRECTION',
         ha='center', va='center',
         fontsize=8, color='#4a4a4a',
         fontweight='bold')
