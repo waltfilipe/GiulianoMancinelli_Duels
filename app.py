@@ -3,7 +3,10 @@ import matplotlib.pyplot as plt
 from mplsoccer import Pitch
 import pandas as pd
 
-st.set_page_config(layout="wide")
+# ==========================
+# CONFIG
+# ==========================
+st.set_page_config(layout="centered")
 
 st.title("Defensive & Duel Map")
 
@@ -36,7 +39,7 @@ eventos = [
 df = pd.DataFrame(eventos, columns=["tipo", "x", "y"])
 
 # ==========================
-# Campo
+# Campo (MENOR)
 # ==========================
 pitch = Pitch(
     pitch_type='statsbomb',
@@ -44,7 +47,7 @@ pitch = Pitch(
     line_color='#4a4a4a'
 )
 
-fig, ax = pitch.draw(figsize=(10, 6))
+fig, ax = pitch.draw(figsize=(7, 4.5))  # 🔑 reduzido
 
 # ==========================
 # Plot
@@ -52,7 +55,7 @@ fig, ax = pitch.draw(figsize=(10, 6))
 for _, row in df.iterrows():
     
     lw = 0.5
-    size = 120
+    size = 100  # leve redução proporcional
 
     if row["tipo"] == "DUEL LOST":
         marker = 'x'
@@ -66,12 +69,12 @@ for _, row in df.iterrows():
     elif row["tipo"] == "AERIAL WON":
         marker = '^'
         color = (0.2, 0.3, 1, 0.9)
-        size = 140
+        size = 120
         
     elif row["tipo"] == "AERIAL LOST":
         marker = 'v'
         color = (1, 0, 0, 0.8)
-        size = 140
+        size = 120
 
     elif row["tipo"] == "FOULED":
         marker = 's'
@@ -80,7 +83,7 @@ for _, row in df.iterrows():
     elif row["tipo"] == "FOUL":
         marker = 'P'
         color = (0.6, 0.2, 0.2, 0.9)
-        size = 140
+        size = 120
 
     elif row["tipo"] == "INTERCEPTION":
         marker = 'D'
@@ -89,16 +92,15 @@ for _, row in df.iterrows():
     elif row["tipo"] == "CLEARANCE":
         marker = 'h'
         color = (0, 0.8, 0.8, 0.9)
-        size = 140
+        size = 120
         
     elif row["tipo"] == "BLOCK":
         marker = 'p'
         color = (0.6, 0.1, 0.6, 0.9)
-        size = 140
+        size = 120
 
     pitch.scatter(
-        row.x,
-        row.y,
+        row.x, row.y,
         marker=marker,
         s=size,
         color=color,
@@ -124,44 +126,68 @@ ax.scatter([], [], marker='P', color=(0.6, 0.2, 0.2), label='Foul')
 ax.legend(
     loc='upper left',
     bbox_to_anchor=(1.02, 1),
-    framealpha=1.0,
+    framealpha=1,
     facecolor='white',
     edgecolor='black',
     title="Eventos",
-    fontsize=10
+    fontsize=9
 )
 
 # ==========================
-# Attack Direction Arrow
+# Attack Arrow
 # ==========================
-pitch.arrows(
-    40, 85, 60, 85,
-    color='#4a4a4a',
-    width=1.5,
-    headwidth=4,
-    headlength=5,
-    ax=ax,
-    clip_on=False
-)
+pitch.arrows(40, 85, 60, 85,
+             color='#4a4a4a',
+             width=1.2,
+             headwidth=3,
+             headlength=4,
+             ax=ax,
+             clip_on=False)
 
-ax.text(
-    50, 88,
-    'ATTACK DIRECTION',
-    ha='center',
-    va='center',
-    fontsize=9,
-    color='#4a4a4a',
-    fontweight='bold'
-)
+ax.text(50, 88, 'ATTACK DIRECTION',
+        ha='center', va='center',
+        fontsize=8, color='#4a4a4a',
+        fontweight='bold')
 
-# ==========================
-# Título
-# ==========================
-plt.title("Defensive & Duel Map", fontsize=16, fontweight='bold', pad=15)
-
+plt.title("Defensive & Duel Map", fontsize=14, pad=10)
 plt.tight_layout()
 
+# 🔑 NÃO usar container width
+st.pyplot(fig, use_container_width=False)
+
 # ==========================
-# Streamlit render
+# Estatísticas
 # ==========================
-st.pyplot(fig, use_container_width=True)
+st.markdown("---")
+st.markdown("## Duels")
+
+col1, col2 = st.columns(2)
+
+with col1:
+    st.markdown("### GROUND DUELS")
+    st.markdown("""
+    **Total:** 11  
+    **Won:** 9  
+    **25.0%**
+    """)
+
+with col2:
+    st.markdown("### AERIAL DUELS")
+    st.markdown("""
+    **Total:** 3  
+    **Won:** 2  
+    **66.6%**
+    """)
+
+st.markdown("---")
+
+col3, col4, col5 = st.columns(3)
+
+col3.metric("Fouls", "1")
+col4.metric("Fouled", "1")
+col5.metric("Interceptions", "1")
+
+col6, col7 = st.columns(2)
+
+col6.metric("Clearances", "2")
+col7.metric("Shot Blocks", "1")
